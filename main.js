@@ -49,10 +49,9 @@ const app = new Vue({
             const idx = Math.random() * this.size(values);
             let s = 0;
             for (const [i, v] of values.entries()) {
-                if (idx < s) return i;
                 s += v;
+                if (idx < s) return i;
             }
-            return NUMBARS - 1;
         },
         sampleMany(values, size) {
             const sample = Array(NUMBARS).fill(0);
