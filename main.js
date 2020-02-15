@@ -6,9 +6,9 @@ const normal = x => Math.exp(-x * x / 2) / (Math.sqrt(2 * Math.PI));
 const app = new Vue({
     el: '#main',
     data: {
-        values: [...Array(NUMBARS).keys()].map(i => Math.round(normal(((i + 0.5) * BARSIZE - 200) / 80) * 200)),
+        values: [...Array(NUMBARS).keys()].map(i => Math.round(normal(((i + 0.5) * BARSIZE - 200) / 80) * 300)),
         dragging: false,
-        sampleSize: 10,
+        sampleSize: 300,
         sample: Array(NUMBARS).fill(0)
     },
     computed: {
@@ -17,9 +17,18 @@ const app = new Vue({
         },
         sampMax() {
             return this.max(this.sample);
+        },
+        sampTick() {
+            return Math.ceil((this.sampMax + 1) / 5);
+        },
+        sampHeight() {
+            return 200 / this.roundTick(this.sampMax + 5, this.sampTick);
         }
     },
     methods: {
+        roundTick(x, tick) {
+            return Math.ceil(x / tick) * tick;
+        },
         max(values) {
             return values.reduce((t, v) => Math.max(t, v), 0);
         },
@@ -73,6 +82,7 @@ const app = new Vue({
         }
     },
     mounted() {
-        window.addEventListener('mouseup', this.stopDrag)
+        window.addEventListener('mouseup', this.stopDrag);
+        this.sample = this.sampleMany(this.values, this.sampleSize);
     },
 });

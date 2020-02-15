@@ -32,12 +32,21 @@
 
                     <div class="column">
                         <h2 class="title is-5">Population Distribution</h2>
-                        <div class="distr" ref="distr" @mousedown="startDrag">
-                            <div class="bars">
-                                <div class="bar" v-for="v in values" :style="{ height: `${v}px` }"></div>
+                        <div class="distr" @mousedown="startDrag">
+                            <div class="v-axis">
+                                <div v-for="x in [...Array(5).keys()]">
+                                    <span>{{ x * 50 }}</span>
+                                </div>
                             </div>
-                            <div class="h-axis">
-                                <span v-for="x in [...Array(9).keys()]">{{ x * 50 }}</span>
+                            <div class="v-container" ref="distr">
+                                <div class="bars">
+                                    <div class="bar" v-for="v in values" :style="{ height: `${v}px` }"></div>
+                                </div>
+                                <div class="h-axis">
+                                    <div v-for="x in [...Array(9).keys()]">
+                                        <span>{{ x * 50 }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <table class="table">
@@ -66,12 +75,24 @@
 
                     <div class="column">
                         <h2 class="title is-5">Sample Distribution</h2>
-                        <div class="distr" @mousedown="startDrag">
-                            <div class="bars">
-                                <div class="bar" v-for="v in sample" :style="{ height: `${v / sampMax * 150}px` }"></div>
+                        <div class="distr">
+                            <div class="v-axis">
+                                <div v-for="x in [...Array(roundTick(sampMax + 5, sampTick) / sampTick + 1).keys()]">
+                                    <span>{{ x * sampTick }}</span>
+                                </div>
                             </div>
-                            <div class="h-axis">
-                                <span v-for="x in [...Array(9).keys()]">{{ x * 50 }}</span>
+                            <div class="v-container">
+                                <div class="bars">
+                                    <div class="bar" v-for="v in sample" :style="{ height: sampleSize < 300 ? '' : `${sampHeight * v}px`}">
+                                        <div class="single" v-if="sampleSize < 300" v-for="i in v"
+                                            :style="{ height: `${sampHeight}px` }"></div>
+                                    </div>
+                                </div>
+                                <div class="h-axis">
+                                    <div v-for="x in [...Array(9).keys()]">
+                                        <span>{{ x * 50 }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <table class="table">

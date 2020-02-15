@@ -1,18 +1,25 @@
 .distr {
-    width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    box-sizing: content-box;
-    display: flex;
-    flex-direction: column;
     margin-top: 20px;
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.distr .v-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 400px;
 }
 
 .distr .bars {
+    box-sizing: content-box;
     background-color: #EEEEEE;
+    border-left: 2px solid black;
     border-bottom: 2px solid black;
+    margin-left: -1px;
+    margin-right: 1px;
+    margin-top: 1px;
     display: flex;
     align-items: flex-end;
     height: 200px;
@@ -20,25 +27,62 @@
 
 .distr .bars div.bar {
     flex: 1;
+    box-sizing: border-box;
     background-color: #3498DB;
     border-left: 1px solid #EEEEEE;
     border-right: 1px solid #EEEEEE;
 }
 
-.distr .h-axis {
-    display: flex;
-    margin-left: -25px;
-    margin-right: -25px;
-    user-select: none;
+.distr .bars .bar .single {
+    border-top: 2px solid #EEEEEE;
 }
 
-.distr .h-axis span {
-    flex: 1;
-    text-align: center;
+.distr .v-axis {
+    display: flex;
+    flex-direction: column-reverse;
+    margin-bottom: 27px;
+    justify-content: space-between;
+    margin-right: 10px;
+}
+
+.distr .v-axis div {
+    position: relative;
+    height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.distr .v-axis div::before {
+    content: "";
+    display: block;
+    position: absolute;
+    height: 2px;
+    width: 10px;
+    top: 50%;
+    right: -20px;
+    transform: translateX(-50%);
+    background-color: black;
+    z-index: 100;
+}
+
+.distr .h-axis {
+    display: flex;
+    height: 25px;
+    justify-content: space-between;
+}
+
+.distr .h-axis div {
+    width: 0;
     position: relative;
 }
 
-.distr .h-axis span::before {
+.distr .h-axis span {
+    position: absolute;
+    transform: translateX(-50%);
+}
+
+.distr .h-axis div::before {
     content: "";
     display: block;
     position: absolute;
