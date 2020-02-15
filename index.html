@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Explore the Central Limit Theorem</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body);"></script>
+    <script defer src="main.js"></script>
+
+</head>
+
+<body>
+
+    <div id="main" @mousemove="doDrag">
+
+        <section class="section">
+            <div class="container has-text-centered">
+                <h1 class="title">CLT Experiment</h1>
+
+                <div class="columns">
+
+                    <div class="column">
+                        <h2 class="title is-5">Population Distribution</h2>
+                        <div class="distr" ref="distr" @mousedown="startDrag">
+                            <div class="bars">
+                                <div class="bar" v-for="v in values" :style="{ height: `${v}px` }"></div>
+                            </div>
+                            <div class="h-axis">
+                                <span v-for="x in [...Array(9).keys()]">{{ x * 50 }}</span>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <tr>
+                                <th>Size</th>
+                                <td>\(N\)</td>
+                                <td>{{ size(values) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Mean</th>
+                                <td>\(\mu\)</td>
+                                <td>{{ mean(values).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Variance</th>
+                                <td>\(\sigma^2\)</td>
+                                <td>{{ vari(values).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>SD</th>
+                                <td>\(\sigma\)</td>
+                                <td>{{ sd(values).toFixed(2) }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="column">
+                        <h2 class="title is-5">Sample Distribution</h2>
+                        <div class="distr" @mousedown="startDrag">
+                            <div class="bars">
+                                <div class="bar" v-for="v in sample" :style="{ height: `${v / sampMax * 150}px` }"></div>
+                            </div>
+                            <div class="h-axis">
+                                <span v-for="x in [...Array(9).keys()]">{{ x * 50 }}</span>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <tr>
+                                <th>Size</th>
+                                <td>\(n\)</td>
+                                <td>{{ size(sample) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Mean</th>
+                                <td>\(\bar{x}\)</td>
+                                <td>{{ mean(sample).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Variance</th>
+                                <td>\(s^2\)</td>
+                                <td>{{ vari(sample).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>SD</th>
+                                <td>\(s\)</td>
+                                <td>{{ sd(sample).toFixed(2) }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+
+</html>

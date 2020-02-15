@@ -1,0 +1,60 @@
+.distr {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    box-sizing: content-box;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.distr .bars {
+    background-color: #EEEEEE;
+    border-bottom: 2px solid black;
+    display: flex;
+    align-items: flex-end;
+    height: 200px;
+}
+
+.distr .bars div.bar {
+    flex: 1;
+    background-color: #3498DB;
+    border-left: 1px solid #EEEEEE;
+    border-right: 1px solid #EEEEEE;
+}
+
+.distr .h-axis {
+    display: flex;
+    margin-left: -25px;
+    margin-right: -25px;
+    user-select: none;
+}
+
+.distr .h-axis span {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+.distr .h-axis span::before {
+    content: "";
+    display: block;
+    position: absolute;
+    height: 10px;
+    width: 2px;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table tr > th + td + td {
+    font-family: monospace;
+}
