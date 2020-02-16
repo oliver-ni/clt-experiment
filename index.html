@@ -12,8 +12,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
     <link rel="stylesheet" href="style.css">
 
-    <script defer src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+    <script src="https://kit.fontawesome.com/d80ce6916d.js" crossorigin="anonymous"></script>
+
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"
         onload="renderMathInElement(document.body);"></script>
     <script defer src="main.js"></script>
@@ -25,8 +27,46 @@
     <div id="main" @mousemove="doDrag">
 
         <section class="section">
-            <div class="container has-text-centered">
+            <div class="container-fluid has-text-centered">
                 <h1 class="title">CLT Experiment</h1>
+
+                <h2 class="title is-5 has-text-centered">Configuration</h2>
+
+                <div class="select">
+                    <select v-model="sampleSize" @change="clearSample">
+                        <option :value=1>n=1</option>
+                        <option :value=2>n=2</option>
+                        <option :value=5>n=5</option>
+                        <option :value=10>n=10</option>
+                        <option :value=20>n=20</option>
+                        <option :value=50>n=50</option>
+                        <option :value=100>n=100</option>
+                        <option :value=200>n=200</option>
+                        <option :value=500>n=500</option>
+                        <option :value=1000>n=1000</option>
+                    </select>
+                </div>
+
+                <button class="button is-link" @click="doSample()">Run 1 Sample</button>
+
+                <div class="select">
+                    <select v-model="numToRun">
+                        <option :value=5>Run 5</option>
+                        <option :value=10>Run 10</option>
+                        <option :value=20>Run 20</option>
+                        <option :value=50>Run 50</option>
+                        <option :value=100>Run 100</option>
+                        <option :value=200>Run 200</option>
+                        <option :value=500>Run 500</option>
+                        <option :value=1000>Run 1000</option>
+                        <option :value=2000>Run 2000</option>
+                        <option :value=10000>Run 10000</option>
+                    </select>
+                </div>
+
+                <button class="button is-link" @click="doManySamples()">Run Many Samples</button>
+
+                <hr>
 
                 <div class="columns">
 
@@ -83,9 +123,10 @@
                             </div>
                             <div class="v-container">
                                 <div class="bars">
-                                    <div class="bar" v-for="v in sample" :style="{ height: sampleSize < 300 ? '' : `${sampHeight * v}px`}">
-                                        <div class="single" v-if="sampleSize < 300" v-for="i in v"
-                                            :style="{ height: `${sampHeight}px` }"></div>
+                                    <div class="bar" v-for="v in sample" :style="{ height: `${sampHeight * v}px`}">
+                                        <div class="single" v-if="sampMax < 20" v-for="i in v"
+                                            :style="{ height: `${sampHeight}px` }">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="h-axis">
@@ -115,6 +156,53 @@
                                 <th>SD</th>
                                 <td>\(s\)</td>
                                 <td>{{ sd(sample).toFixed(2) }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="column">
+                        <h2 class="title is-5">Distribution of Sample Means</h2>
+                        <div class="distr">
+                            <div class="v-axis">
+                                <div v-for="x in [...Array(roundTick(sdmMax + 5, sdmTick) / sdmTick + 1).keys()]">
+                                    <span>{{ x * sdmTick }}</span>
+                                </div>
+                            </div>
+                            <div class="v-container">
+                                <div class="bars">
+                                    <div class="bar" v-for="v in sdm" :style="{ height: `${sdmHeight * v}px`}">
+                                        <div class="single" v-if="max(sdm) < 20" v-for="i in v"
+                                            :style="{ height: `${sdmHeight}px` }">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="h-axis">
+                                    <div v-for="x in [...Array(9).keys()]">
+                                        <span>{{ x * 50 }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <tr>
+                                <th>Size</th>
+                                <td>\(n\)</td>
+                                <td>{{ size(sdm) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Mean</th>
+                                <td>\(\bar{x}\)</td>
+                                <td>{{ mean(sdm).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Variance</th>
+                                <td>\(s^2\)</td>
+                                <td>{{ vari(sdm).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>SD</th>
+                                <td>\(s\)</td>
+                                <td>{{ sd(sdm).toFixed(2) }}</td>
                             </tr>
                         </table>
                     </div>

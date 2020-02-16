@@ -7,14 +7,13 @@ const app = new Vue({
     el: '#main',
     data: {
         values: [...Array(NUMBARS).keys()].map(i => Math.round(normal(((i + 0.5) * BARSIZE - 200) / 80) * 300)),
+        sample: Array(NUMBARS).fill(0),
+        sdm: Array(NUMBARS).fill(0),
         dragging: false,
-        sampleSize: 300,
-        sample: Array(NUMBARS).fill(0)
+        sampleSize: 20,
+        numToRun: 100,
     },
     computed: {
-        popMax() {
-            return this.max(this.values);
-        },
         sampMax() {
             return this.max(this.sample);
         },
@@ -23,9 +22,25 @@ const app = new Vue({
         },
         sampHeight() {
             return 200 / this.roundTick(this.sampMax + 5, this.sampTick);
+        },
+        sdmMax() {
+            return this.max(this.sdm);
+        },
+        sdmTick() {
+            return Math.ceil((this.sdmMax + 1) / 5);
+        },
+        sdmHeight() {
+            return 200 / this.roundTick(this.sdmMax + 5, this.sdmTick);
+        },
+        barSizePx() {
+            return this.$refs.distr.offsetWidth / NUMBARS;
         }
     },
     methods: {
+        clearSample() {
+            this.sample = Array(NUMBARS).fill(0);
+            this.sdm = Array(NUMBARS).fill(0);
+        },
         roundTick(x, tick) {
             return Math.ceil(x / tick) * tick;
         },
@@ -60,6 +75,22 @@ const app = new Vue({
             }
             return sample;
         },
+        async doSample(set = true) {
+            const sample = this.sampleMany(this.values, this.sampleSize);
+            if (set) this.sample = sample;
+            const idx = Math.floor(this.mean(sample) / BARSIZE);
+            this.$set(this.sdm, idx, this.sdm[idx] + 1);
+        },
+        async doManySamples() {
+            let i = 0;
+            function step() {
+                if (i >= this.numToRun) return;
+                this.doSample(i % 10 == 0);
+                i++;
+                setTimeout(step.bind(this), 10);
+            }
+            step.bind(this)();
+        },
         startDrag() {
             this.dragging = true;
         },
@@ -73,15 +104,14 @@ const app = new Vue({
                 const x = e.pageX - bound.left;
                 const y = Math.round(200 - (e.pageY - bound.top));
 
-                const idx = Math.floor(x / BARSIZE);
-                if (x >= 0 && x < 400) {
-                    this.$set(this.values, idx, Math.max(Math.min(y, 200), 0))
+                const idx = Math.floor(x / this.barSizePx);
+                if (x >= 0 && x < this.$refs.distr.offsetWidth) {
+                    this.$set(this.values, idx, Math.max(Math.min(y, 200)))
                 }
             }
         }
     },
     mounted() {
         window.addEventListener('mouseup', this.stopDrag);
-        this.sample = this.sampleMany(this.values, this.sampleSize);
     },
 });

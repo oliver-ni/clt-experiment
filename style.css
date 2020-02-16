@@ -9,7 +9,9 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    width: 400px;
+    min-width: 300px;
+    max-width: 400px;
+    width: 100%;
 }
 
 .distr .bars {
@@ -31,6 +33,8 @@
     background-color: #3498DB;
     border-left: 1px solid #EEEEEE;
     border-right: 1px solid #EEEEEE;
+    transition: height 0.1s;
+    overflow: hidden;
 }
 
 .distr .bars .bar .single {
