@@ -68,148 +68,143 @@
 
                 <hr>
 
-                <div class="scroll-container">
+                <div class="columns scroll-container">
 
-                    <div class="columns">
-
-                        <div class="column">
-                            <h2 class="title is-5">Population Distribution (drag mouse)</h2>
-                            <div class="distr" @mousedown="startDrag">
-                                <div class="v-axis">
-                                    <div v-for="x in [...Array(5).keys()]">
+                    <div class="column">
+                        <h2 class="title is-5">Population Distribution (drag mouse)</h2>
+                        <div class="distr" @mousedown="startDrag">
+                            <div class="v-axis">
+                                <div v-for="x in [...Array(5).keys()]">
+                                    <span>{{ x * 50 }}</span>
+                                </div>
+                            </div>
+                            <div class="v-container" ref="distr">
+                                <div class="bars">
+                                    <div class="bar" v-for="v in values" :style="{ height: `${v}px` }"></div>
+                                </div>
+                                <div class="h-axis">
+                                    <div v-for="x in [...Array(9).keys()]">
                                         <span>{{ x * 50 }}</span>
                                     </div>
                                 </div>
-                                <div class="v-container" ref="distr">
-                                    <div class="bars">
-                                        <div class="bar" v-for="v in values" :style="{ height: `${v}px` }"></div>
-                                    </div>
-                                    <div class="h-axis">
-                                        <div v-for="x in [...Array(9).keys()]">
-                                            <span>{{ x * 50 }}</span>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <tr>
+                                <th>Size</th>
+                                <td>\(N\)</td>
+                                <td>{{ size(values) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Mean</th>
+                                <td>\(\mu\)</td>
+                                <td>{{ mean(values).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Variance</th>
+                                <td>\(\sigma^2\)</td>
+                                <td>{{ vari(values).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>SD</th>
+                                <td>\(\sigma\)</td>
+                                <td>{{ sd(values).toFixed(2) }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="column">
+                        <h2 class="title is-5">Sample Distribution</h2>
+                        <div class="distr">
+                            <div class="v-axis">
+                                <div v-for="x in [...Array(roundTick(sampMax + 5, sampTick) / sampTick + 1).keys()]">
+                                    <span>{{ x * sampTick }}</span>
+                                </div>
+                            </div>
+                            <div class="v-container">
+                                <div class="bars">
+                                    <div class="bar" v-for="v in sample" :style="{ height: `${sampHeight * v}px`}">
+                                        <div class="single" v-if="sampMax < 20" v-for="i in v"
+                                            :style="{ height: `${sampHeight}px` }">
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="h-axis">
+                                    <div v-for="x in [...Array(9).keys()]">
+                                        <span>{{ x * 50 }}</span>
                                     </div>
                                 </div>
                             </div>
-                            <table class="table">
-                                <tr>
-                                    <th>Size</th>
-                                    <td>\(N\)</td>
-                                    <td>{{ size(values) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Mean</th>
-                                    <td>\(\mu\)</td>
-                                    <td>{{ mean(values).toFixed(2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Variance</th>
-                                    <td>\(\sigma^2\)</td>
-                                    <td>{{ vari(values).toFixed(2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>SD</th>
-                                    <td>\(\sigma\)</td>
-                                    <td>{{ sd(values).toFixed(2) }}</td>
-                                </tr>
-                            </table>
                         </div>
+                        <table class="table">
+                            <tr>
+                                <th>Size</th>
+                                <td>\(n\)</td>
+                                <td>{{ size(sample) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Mean</th>
+                                <td>\(\bar{x}\)</td>
+                                <td>{{ mean(sample).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Variance</th>
+                                <td>\(s^2\)</td>
+                                <td>{{ vari(sample).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>SD</th>
+                                <td>\(s\)</td>
+                                <td>{{ sd(sample).toFixed(2) }}</td>
+                            </tr>
+                        </table>
+                    </div>
 
-                        <div class="column">
-                            <h2 class="title is-5">Sample Distribution</h2>
-                            <div class="distr">
-                                <div class="v-axis">
-                                    <div
-                                        v-for="x in [...Array(roundTick(sampMax + 5, sampTick) / sampTick + 1).keys()]">
-                                        <span>{{ x * sampTick }}</span>
+                    <div class="column">
+                        <h2 class="title is-5">Distribution of Sample Means</h2>
+                        <div class="distr">
+                            <div class="v-axis">
+                                <div v-for="x in [...Array(roundTick(sdmMax + 5, sdmTick) / sdmTick + 1).keys()]">
+                                    <span>{{ x * sdmTick }}</span>
+                                </div>
+                            </div>
+                            <div class="v-container">
+                                <div class="bars">
+                                    <div class="bar" v-for="v in sdm" :style="{ height: `${sdmHeight * v}px`}">
+                                        <div class="single" v-if="max(sdm) < 20" v-for="i in v"
+                                            :style="{ height: `${sdmHeight}px` }">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="v-container">
-                                    <div class="bars">
-                                        <div class="bar" v-for="v in sample" :style="{ height: `${sampHeight * v}px`}">
-                                            <div class="single" v-if="sampMax < 20" v-for="i in v"
-                                                :style="{ height: `${sampHeight}px` }">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="h-axis">
-                                        <div v-for="x in [...Array(9).keys()]">
-                                            <span>{{ x * 50 }}</span>
-                                        </div>
+                                <div class="h-axis">
+                                    <div v-for="x in [...Array(9).keys()]">
+                                        <span>{{ x * 50 }}</span>
                                     </div>
                                 </div>
                             </div>
-                            <table class="table">
-                                <tr>
-                                    <th>Size</th>
-                                    <td>\(n\)</td>
-                                    <td>{{ size(sample) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Mean</th>
-                                    <td>\(\bar{x}\)</td>
-                                    <td>{{ mean(sample).toFixed(2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Variance</th>
-                                    <td>\(s^2\)</td>
-                                    <td>{{ vari(sample).toFixed(2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>SD</th>
-                                    <td>\(s\)</td>
-                                    <td>{{ sd(sample).toFixed(2) }}</td>
-                                </tr>
-                            </table>
                         </div>
-
-                        <div class="column">
-                            <h2 class="title is-5">Distribution of Sample Means</h2>
-                            <div class="distr">
-                                <div class="v-axis">
-                                    <div v-for="x in [...Array(roundTick(sdmMax + 5, sdmTick) / sdmTick + 1).keys()]">
-                                        <span>{{ x * sdmTick }}</span>
-                                    </div>
-                                </div>
-                                <div class="v-container">
-                                    <div class="bars">
-                                        <div class="bar" v-for="v in sdm" :style="{ height: `${sdmHeight * v}px`}">
-                                            <div class="single" v-if="max(sdm) < 20" v-for="i in v"
-                                                :style="{ height: `${sdmHeight}px` }">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="h-axis">
-                                        <div v-for="x in [...Array(9).keys()]">
-                                            <span>{{ x * 50 }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <table class="table">
-                                <tr>
-                                    <th>Size</th>
-                                    <td></td>
-                                    <td>{{ size(sdm) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Mean</th>
-                                    <td>\(\mu_{\bar{x}}\)</td>
-                                    <td>{{ mean(sdm).toFixed(2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Variance</th>
-                                    <td>\(\sigma_{\bar{x}}^2\)</td>
-                                    <td>{{ vari(sdm).toFixed(2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>SD</th>
-                                    <td>\(\sigma_{\bar{x}}\)</td>
-                                    <td>{{ sd(sdm).toFixed(2) }}</td>
-                                </tr>
-                            </table>
-                        </div>
-
+                        <table class="table">
+                            <tr>
+                                <th>Size</th>
+                                <td></td>
+                                <td>{{ size(sdm) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Mean</th>
+                                <td>\(\mu_{\bar{x}}\)</td>
+                                <td>{{ mean(sdm).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Variance</th>
+                                <td>\(\sigma_{\bar{x}}^2\)</td>
+                                <td>{{ vari(sdm).toFixed(2) }}</td>
+                            </tr>
+                            <tr>
+                                <th>SD</th>
+                                <td>\(\sigma_{\bar{x}}\)</td>
+                                <td>{{ sd(sdm).toFixed(2) }}</td>
+                            </tr>
+                        </table>
                     </div>
 
                 </div>
