@@ -31,9 +31,6 @@ const app = new Vue({
         },
         sdmHeight() {
             return 200 / this.roundTick(this.sdmMax + 5, this.sdmTick);
-        },
-        barSizePx() {
-            return this.$refs.distr.offsetWidth / NUMBARS;
         }
     },
     methods: {
@@ -104,7 +101,7 @@ const app = new Vue({
                 const x = e.pageX - bound.left;
                 const y = Math.round(200 - (e.pageY - bound.top));
 
-                const idx = Math.floor(x / this.barSizePx);
+                const idx = Math.floor(x / (this.$refs.distr.offsetWidth / NUMBARS));
                 if (x >= 0 && x < this.$refs.distr.offsetWidth) {
                     this.$set(this.values, idx, Math.max(Math.min(y, 200), 0))
                 }
