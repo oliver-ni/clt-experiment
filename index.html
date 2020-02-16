@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Explore the Central Limit Theorem</title>
+    <title>CLT Experiment</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
@@ -71,7 +71,7 @@
                 <div class="columns">
 
                     <div class="column">
-                        <h2 class="title is-5">Population Distribution</h2>
+                        <h2 class="title is-5">Population Distribution (drag mouse)</h2>
                         <div class="distr" @mousedown="startDrag">
                             <div class="v-axis">
                                 <div v-for="x in [...Array(5).keys()]">
