@@ -106,7 +106,7 @@ const app = new Vue({
 
                 const idx = Math.floor(x / this.barSizePx);
                 if (x >= 0 && x < this.$refs.distr.offsetWidth) {
-                    this.$set(this.values, idx, Math.max(Math.min(y, 200)))
+                    this.$set(this.values, idx, Math.max(Math.min(y, 200), 0))
                 }
             }
         }
