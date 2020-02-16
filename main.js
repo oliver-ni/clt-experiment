@@ -10,7 +10,7 @@ const app = new Vue({
         sample: Array(NUMBARS).fill(0),
         sdm: Array(NUMBARS).fill(0),
         dragging: false,
-        sampleSize: 20,
+        sampleSize: 10,
         numToRun: 100,
     },
     computed: {
