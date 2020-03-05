@@ -1,5 +1,17 @@
-html {
+html, body {
     user-select: none;
+    height: 100%;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.foot {
+    flex-grow: 0;
 }
 
 .scroll-container {
